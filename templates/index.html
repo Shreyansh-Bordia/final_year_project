@@ -117,4 +117,73 @@
             </div>
         </div>
     </div>
+
+    <div class="step-section">
+        <div>
+        </div>
+    </div>
+
+    <div class="doctor-cards-container" style="background-color: #a4d5ff; padding: 30px 30px 20px 30px;">
+        <h2 style="margin-left: 40px; font-weight: bolder;">Registered Doctors</h2>
+        <div class="scroll-cards">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/doctors/doctor1.jpg') }}" alt="Dr. Priya Sharma">
+                <h4>Dr. Priya Sharma</h4>
+                <p>MBBS, MD<br>Karnataka</p>
+            </div>
+
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/doctors/doctor2.jpg') }}" alt="Dr. Raj Mehta">
+                <h4>Dr. Raj Mehta</h4>
+                <p>MBBS, MS<br>Maharashtra</p>
+            </div>
+
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/doctors/doctor3.jpg') }}" alt="Dr. Anjali Verma">
+                <h4>Dr. Anjali Verma</h4>
+                <p>BAMS<br>Delhi</p>
+            </div>
+
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/doctors/doctor4.jpg') }}" alt="Dr. Kavita Rao">
+                <h4>Dr. Kavita Rao</h4>
+                <p>MBBS, MD<br>Tamil Nadu</p>
+            </div>
+
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/doctors/doctor5.jpg') }}" alt="Dr. Akash Patel">
+                <h4>Dr. Akash Patel</h4>
+                <p>MBBS, MD<br>Gujarat</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-section">
+        <div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollContainer = document.querySelector('.scroll-cards');
+            let scrollAmount = 0;
+    
+            function autoScroll() {
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+    
+                if (scrollAmount >= maxScroll) {
+                    scrollAmount = 0; // Reset to start when end is reached
+                } else {
+                    scrollAmount += 400; // Adjust speed by changing this value
+                }
+    
+                scrollContainer.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+    
+            setInterval(autoScroll, 2500); // Scroll every 1 second
+        });
+    </script>    
 {% endblock %}
