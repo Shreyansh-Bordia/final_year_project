@@ -1,0 +1,120 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevan Kavach</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f8ff;
+        }
+        .navbar {
+            background-color: #0078FF;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .hero-section {
+            height: 80vh;
+            /* background: url('hero-bg.jpg') no-repeat center center/cover; */
+            background-image: url('/static/images/now.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* background-attachment: fixed; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0078FF;
+            text-align: center;
+        }
+
+        p{
+            color: black;
+        }
+
+        .btn-primary {
+            background-color: #0078FF;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Jeevan Kavach</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div>
+            <h1>Welcome to Jeevan Kavach : Your Trusted eDoctor</h1>
+            <p> Empowering healthcare with security and convenience, <br> Jeevan Kavach ensures seamless access to medical consultations from the comfort of your home. <br>Our platform combines advanced encryption with user-friendly features, prioritizing your privacy and well-being.</p>
+            <h3>Experience healthcare redefined — secure, reliable, and just a click away.</h3><br>
+            <a href="/" class="btn btn-primary">Get Started</a>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>For Patients</h3>
+                <p>Book appointments, consult doctors, and manage your health online.</p>
+                <a href="/patient_login" class="btn btn-primary">Patient Login</a>
+            </div>
+            <div class="col-md-6">
+                <h3>For Doctors</h3>
+                <p>Manage your appointments, consult patients, and track records efficiently.</p>
+                <a href="/doctor_login" class="btn btn-primary">Doctor Login</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-3" style="background-color: #0078FF; color: #fff;">
+        &copy; 2025 JeevanKavach. All Rights Reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+
+
+{% extends 'base.html' %}
+{% block content %}
+    <div class="hero-section">
+        <div>
+            <h1>Welcome to Jeevan Kavach: Your Trusted eDoctor</h1>
+            <p>
+                Empowering healthcare with security and convenience, <br>
+                Jeevan Kavach ensures seamless access to medical consultations from the comfort of your home. <br>
+                Our platform combines advanced encryption with user-friendly features, prioritizing your privacy and well-being.
+            </p>
+            <h3>Experience healthcare redefined — secure, reliable, and just a click away.</h3><br>
+            <a href="/" class="btn btn-primary">Get Started</a>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>For Patients</h3>
+                <p>Book appointments, consult doctors, and manage your health online.</p>
+                <a href="/login?role=patient" class="btn btn-primary">Patient Login</a>
+            </div>
+            <div class="col-md-6">
+                <h3>For Doctors</h3>
+                <p>Manage your appointments, consult patients, and track records efficiently.</p>
+                <a href="/login?role=doctor" class="btn btn-primary">Doctor Login</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

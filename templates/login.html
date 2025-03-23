@@ -1,0 +1,33 @@
+
+{% extends 'base.html' %}
+{% block content %}
+    <div class="hero-section">
+        <div class="login-container">
+            <h1>{{ role }} Login</h1><br>
+            <form method="POST">
+                <input type="hidden" name="role" value="{{ role }}">  <!-- Auto-select role -->
+                
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+                <br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" required><br>
+                <br><br>
+
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+    <div class="signbox">
+        <div>
+            <h3>New User?</h3>
+            <p>Sign in now to enjoy our secured medical services.</p>
+            <!-- <a href="/signin?role=patient" class="btn btn-primary">Sign Up</a> -->
+            <a href="/signup?role={{ role }}" class="btn btn-primary">Sign Up</a>
+
+        </div>
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <h2>Patient Dashboard</h2>
+            <div class="profile-menu">
+                <img src="{{ url_for('static', filename='images/profile-icon.png') }}" alt="Profile" class="profile-icon" id="profileIcon">
+                <ul class="dropdown-menu" id="dropdownMenu">
+                    <li><a href="/settings">⚙️ Settings</a></li>
+                    <li><a href="/update-profile">📝 Update Profile</a></li>
+                    <li><a href="/logout">🚪 Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="dashboard-section">
+            <h2>📜 Medical History</h2>
+            <p>View and manage your past medical records.</p>
+            <a href="/history" class="btn btn-primary">View History</a>
+        </div>
+
+      
+        <div class="dashboard-section">
+            <h2>📅 Book an Appointment</h2>
+            <p>Schedule a consultation with a doctor.</p>
+            <a href="/appointment" class="btn btn-primary">Get Appointment</a>
+        </div>
+    </div>
+</body>
+</html>
