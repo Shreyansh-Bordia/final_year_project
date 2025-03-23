@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-</head>
-<body>
+{% extends 'base2.html' %}
+{% block content %}
     <div class="dashboard-container">
         <nav class="top-nav">
             <h2>Patient Dashboard</h2>
@@ -34,5 +26,4 @@
             <a href="/appointment" class="btn btn-primary">Get Appointment</a>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

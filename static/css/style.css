@@ -65,9 +65,19 @@ body {
 }
 
 .btn-primary {
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
     background-color: #0078FF;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.2);
     border: none;
 }
+
 .navbar {
     background-color: #0078FF;
     margin-top: 10px;
@@ -88,7 +98,7 @@ body {
     text-align: center;
 }
 
-.login-container, .dashboard-container {
+.login-container, .dashboard-container, .Signup-container {
     background: #ffffff;
     padding: 40px 60px 40px 40px;
     border-radius: 12px;
@@ -96,6 +106,44 @@ body {
     width: 100%;
     max-width: 400px;
     text-align: center;
+    overflow: hidden; 
+}
+
+.Signup-container {
+    max-width: 55%;
+    padding: 40px;
+}
+
+.Signup-container form{
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+  }
+  
+  .form-group label {
+    width: 120px;
+    text-align: left;
+    flex-shrink: 0;
+  }
+  
+  .form-group input {
+    flex: 1;
+    padding: 5px;
+    min-width: 0%;
+    max-width: 100%;
+  } 
+  
+  .Signup-container button {
+    grid-column: span 2;
+    padding: 10px;
 }
 
 p {
@@ -108,70 +156,6 @@ p {
     justify-content: center;
     margin: 40px 0;
 }
-
-/* $$$--signup form css */
-
-/* Compact Signup Form */
-.Signup-container {
-    background: #ffffff;
-    padding: 10px; /* Very minimal padding */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 300px; /* Smaller width */
-    text-align: center;
-    margin: 20px auto; /* Keeps it centered */
-}
-
-/* Labels with less space */
-.Signup-container form label {
-    display: block;
-    font-weight: bold;
-    text-align: left;
-    margin: 2px 0; /* Almost no extra space */
-    font-size: 12px; /* Smaller font */
-}
-
-/* Small input fields */
-.Signup-container form input {
-    width: 100%;
-    padding: 4px; /* Very small padding */
-    font-size: 12px; /* Reduce font size */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    display: block;
-    box-sizing: border-box;
-    margin-bottom: 4px; /* Very little space between inputs */
-}
-
-/* Smaller submit button */
-.Signup-container form button {
-    width: 100%;
-    padding: 6px; /* Small button */
-    font-size: 12px;
-    background-color: #0078FF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 6px; /* Minimal space */
-}
-
-/* Make sure the background does not interfere */
-.hero-section {
-    min-height: 100vh;
-    background-image: url('/static/images/now.png');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px; /* Less padding */
-}
-
-
-/* Patient Dashboard Styling */
-/* $$-- New CSS Additions Below --$$ */
 
 .dashboard-container {
     max-width: 600px;
@@ -245,20 +229,6 @@ p {
     background: #f0f9ff;
 }
 
-/* Improved Buttons */
-.btn-primary {
-    display: inline-block;
-    padding: 12px 18px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #0078FF;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.2);
-    border: none;
-}
 
 .btn-primary:hover {
     background-color: #005FCC;
@@ -342,4 +312,20 @@ p {
     object-fit: cover;
     border: 3px solid #007BFF;
     margin-bottom: 30px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .Signup-container {
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .Signup-container form {
+        grid-template-columns: 1fr;
+    }
+
+    .Signup-container button {
+        grid-column: span 1; 
+    }
 }
