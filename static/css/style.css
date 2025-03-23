@@ -297,3 +297,49 @@ p {
         padding: 10px 15px;
     }
 }
+
+.step-section {
+    height:120vh;
+    background-image: url('/static/images/steps.png');
+    background-size: cover;
+    background-position:center;
+    display: flex;
+}
+
+.app-section {
+    height:100vh;
+    background-image: url('/static/images/app.png');
+    background-size: cover;
+    display: flex;
+}
+
+.scroll-cards {
+    display: flex;
+    gap: 120px;
+    padding: 10px;
+    overflow: hidden; /* Prevent scrollbar display */
+    white-space: nowrap; /* Ensure cards stay in one row */
+    scroll-behavior: smooth; 
+    margin: 30px 150px 60px;
+}
+
+.card {
+    background:#e0f0ff;
+    /* border: 2px solid #0078FF; */
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007BFF;
+    margin-bottom: 30px;
+}
