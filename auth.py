@@ -1,70 +1,71 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, flash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User
 import datetime
+from models import db, User, Patient, Doctor, Admin
 
 auth_bp = Blueprint('auth', __name__)
 
-# Dummy User Data
-users = {
-    'patient': {'username': 'patient', 'password': 'pass123'},
-    'doctor': {'username': 'doctor', 'password': 'doc123'},
-    'admin': {'username': 'admin', 'password': 'admin123'}
-}
-
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    role = request.args.get('role', '')
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
 
-    if request.method == 'GET':
-        return render_template('login.html', role=role)  
+    user = User.query.filter_by(username=username).first()
 
-    if request.content_type == 'application/json':  
-        data = request.json
-        username = data.get('username')
-        password = data.get('password')
-    else:
-        username = request.form['username']
-        password = request.form['password']
+    if user and user.check_password(password):
+        access_token = create_access_token(identity={'username': username, 'role': user.role}, expires_delta=datetime.timedelta(hours=1))
+        return jsonify(access_token=access_token, role=user.role), 200
 
-    for user_role, user in users.items():
-        if user['username'] == username and user['password'] == password:
-            access_token = create_access_token(identity={'username': username, 'role': user_role}, expires_delta=datetime.timedelta(hours=1))
-
-            if request.content_type == 'application/json':
-                return jsonify(access_token=access_token, role=user_role), 200
-
-            session['role'] = user_role
-            return redirect(url_for(f'routes.{user_role}_dashboard'))  # 🔥 FIX HERE
-
-    if request.content_type == 'application/json':
-        return jsonify({"error": "Invalid credentials"}), 401
-    else:
-        flash('Invalid credentials. Please try again.')
-        return redirect(url_for('auth.login', role=role))  # 🔥 FIX HERE
+    return jsonify({"error": "Invalid credentials"}), 401
 
 
 
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
     data = request.json
-    role = data.get('role', 'patient')
     username = data.get('username')
     password = data.get('password')
-    name = data.get('name')
+    role = data.get('role')
     email = data.get('email')
     phone = data.get('phone')
 
-    # Check if user already exists
-    if any(user['username'] == username for user in users.values()):
-        return jsonify({"error": "User already exists. Please log in."}), 400
+    # Role-specific fields
+    age = data.get('age')  # For patient
+    medical_history = data.get('medical_history')  
+    specialization = data.get('specialization')  # For doctor
+    license_number = data.get('license_number')
+    department = data.get('department')  # For admin
 
-    users[role] = {
-        'username': username,
-        'password': password,
-        'name': name,
-        'email': email,
-        'phone': phone
-    }
+    # Check if username already exists
+    if User.query.filter_by(username=username).first():
+        return jsonify({"error": "User already exists"}), 400
 
+    # Create new user
+    new_user = User(username=username, email=email, phone=phone, role=role)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    # Create role-specific record
+    if role == 'patient':
+        new_patient = Patient(user_id=new_user.id, age=age, medical_history=medical_history)
+        db.session.add(new_patient)
+
+    elif role == 'doctor':
+        new_doctor = Doctor(user_id=new_user.id, specialization=specialization, license_number=license_number)
+        db.session.add(new_doctor)
+
+    elif role == 'admin':
+        new_admin = Admin(user_id=new_user.id, department=department)
+        db.session.add(new_admin)
+
+    db.session.commit()
+
+    # Generate JWT token
     access_token = create_access_token(identity={'username': username, 'role': role}, expires_delta=datetime.timedelta(hours=1))
+    
     return jsonify(message="Signup successful!", access_token=access_token), 201

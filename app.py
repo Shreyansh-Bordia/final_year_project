@@ -1,18 +1,20 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-from routes import routes_bp
+from models import db
 from auth import auth_bp
+from routes import routes_bp
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['JWT_SECRET_KEY'] = 'jwtsecretkey'  # Used for encoding JWT tokens
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Change to PostgreSQL or MySQL if needed
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change to a secure key
 
+db.init_app(app)
 jwt = JWTManager(app)
 
-# Register Blueprints
+app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(routes_bp)
-app.register_blueprint(auth_bp)
 
 @app.route('/logout')
 def logout():
@@ -27,4 +29,6 @@ def add_header(response):
     return response
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create tables if not exist
     app.run(debug=True)
