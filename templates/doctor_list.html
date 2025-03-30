@@ -1,0 +1,300 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<style>
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Headings */
+h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* Dropdown Section */
+.select-container {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.select-container select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 250px;
+}
+
+/* Spacing for selected specialty */
+.domain-container {
+    margin-top: 30px;
+    display: none;
+}
+
+/* Doctor Card */
+.doctor-card {
+    background: white;
+    padding: 15px;
+    margin: 12px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: 600px;
+}
+
+.doctor-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.doctor-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.doctor-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #007bff;
+}
+
+.doctor-details h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.doctor-details p {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Availability Indicators */
+.available {
+    border-left: 4px solid #28a745;
+}
+
+.unavailable {
+    border-left: 4px solid #dc3545;
+    background-color: #f8d7da;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-main {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-main:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border: none;
+}
+</style>
+
+<div class="select-container">
+    <h2>🔍 Select a Specialty</h2>
+    <select id="specialtyDropdown">
+        <option value="none">-- Select Specialty --</option>
+        <option value="cardiology">❤️ Cardiology</option>
+        <option value="dentistry">🦷 Dentistry</option>
+        <option value="neurology">🧠 Neurology</option>
+        <option value="ophthalmology">👁️ Ophthalmology</option>
+        <option value="gynecology">👶 Gynecology</option>
+        <option value="orthopedics">🦴 Orthopedics</option>
+    </select>
+</div>
+
+<!-- Specialties -->
+<div id="cardiology" class="domain-container">
+    <!-- <h2>❤️ Cardiology</h2> -->
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. A Sharma</h3>
+                <p>❤️ Cardiologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=sharma" class="btn btn-main">Book Appointment</a>
+        
+    </div>
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr.Anil Raj</h3>
+                <p>❤️ Cardiologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=sharma" class="btn btn-main">Book Appointment</a>
+        
+    </div>
+    <div class="doctor-card unavailable">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. V Nair</h3>
+                <p>❤️ Interventional Cardiologist</p>
+            </div>
+        </div>
+        <button class="btn btn-disabled" disabled>Unavailable</button>
+    </div>
+</div>
+
+<div id="dentistry" class="domain-container">
+    <!-- <h2>🦷 Dentistry</h2> -->
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. B Mehta</h3>
+                <p>🦷 Dentist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=mehta" class="btn btn-main">Book Appointment</a>
+    </div>
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. Anjana Sen</h3>
+                <p>🦷 Dentist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=mehta" class="btn btn-main">Book Appointment</a>
+    </div>
+</div>
+
+<div id="neurology" class="domain-container">
+    <!-- <h2>🧠 Neurology</h2> -->
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. C Iyer</h3>
+                <p>🧠 Neurologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=iyer" class="btn btn-main">Book Appointment</a>
+    </div>
+</div>
+
+<div id="ophthalmology" class="domain-container">
+    <!-- <h2>👁️ Ophthalmology</h2> -->
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. P Singh</h3>
+                <p>👁️ Ophthalmologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=singh" class="btn btn-main">Book Appointment</a>
+    </div>
+</div>
+
+<div id="gynecology" class="domain-container">
+    <!-- <h2>👶 Gynecology</h2> -->
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. Raj Mehta</h3>
+                <p>👶 Gynecologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=mehta" class="btn btn-main">Book Appointment</a>
+    </div>
+    <div class="doctor-card available">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. Nehal Sharma</h3>
+                <p>👶 Gynecologist</p>
+            </div>
+        </div>
+        <a href="/book-appointment?doctor=mehta" class="btn btn-main">Book Appointment</a>
+    </div>
+
+    <div class="doctor-card unavailable">
+        <div class="doctor-info">
+            <img src="https://via.placeholder.com/50" alt="Doctor Image">
+            <div class="doctor-details">
+                <h3>Dr. P Verma</h3>
+                <p>👶 Gynecologist</p>
+            </div>
+        </div>
+        <button class="btn btn-disabled" disabled>Unavailable</button>
+    </div>
+</div>
+
+<!-- <script>
+document.getElementById("specialtyDropdown").addEventListener("change", function() {
+    let selected = this.value;
+    document.querySelectorAll(".domain-container").forEach(el => el.style.display = "none");
+
+    if (selected !== "none") {
+        document.getElementById(selected).style.display = "block";
+    }
+});
+</script> -->
+<script>
+    // Dropdown Selection
+    document.getElementById("specialtyDropdown").addEventListener("change", function() {
+        let selected = this.value;
+        document.querySelectorAll(".domain-container").forEach(el => el.style.display = "none");
+    
+        if (selected !== "none") {
+            document.getElementById(selected).style.display = "block";
+        }
+    });
+    
+    // Booking Button
+    document.querySelectorAll(".btn-main").forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault();  // Prevent page reload (if needed)
+            
+            this.textContent = "✔️ Booked";  // Change text
+            this.classList.add("btn-disabled");  // Add disabled styling
+            this.style.backgroundColor = "#90EE90";  // Change to green
+            this.style.color = "#333";
+            this.disabled = true;  // Disable button
+    
+            alert("Appointment successfully booked!");  // Show alert message
+        });
+    });
+    </script>
+{% endblock %}

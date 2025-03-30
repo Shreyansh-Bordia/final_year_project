@@ -1,0 +1,83 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<div class="history-container">
+    <h2>📜 Medical History</h2>
+
+    {% if history %}
+        <table class="history-table">
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Doctor</th>
+                <th>Notes</th>
+            </tr>
+            {% for record in history %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.time }}</td>
+                <td>{{ record.doctor }}</td>
+                <td>{{ record.notes }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <!-- Doctor Card with enforced spacing -->
+        <div class="doctor-card-wrapper">
+            <div class="doctor-card">
+                <h3>👨‍⚕️ Doctor: {{ history[0].doctor }}</h3>
+            </div>
+        </div>
+
+    {% else %}
+        <p>No medical history found.</p>
+    {% endif %}
+</div>
+
+<style>
+    .history-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .history-table th, .history-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .history-table th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    /* Force the wrapper to take space */
+    .doctor-card-wrapper {
+        display: block;  /* Ensure it respects vertical spacing */
+        margin-top: 150px; /* Pushed further down */
+        width: 100%;
+        text-align: center;
+    }
+    
+    .doctor-card {
+        background-color: #e3f2fd;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #007bff;
+        text-align: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+    }
+</style>
+
+{% endblock %}

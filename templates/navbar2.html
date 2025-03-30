@@ -1,11 +1,40 @@
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const profileIcon = document.getElementById("profileDropdown");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        
+        profileIcon.addEventListener("click", function (event) {
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+            event.stopPropagation();
+        });
+        
+        document.addEventListener("click", function () {
+            dropdownMenu.style.display = "none";
+        });
+    });
+</script>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="/">Jeevan Kavach</a>
-        <div class="collapse navbar-collapse">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact">About & Contact</a></li>
+                <!-- Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        👤 Profile
+                    </a>
+                    <ul class="dropdown-menu" id="dropdownMenu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="/settings">⚙ Settings</a></li>
+                        <li><a class="dropdown-item" href="/update-profile">📝 Update Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">🚪 Logout</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

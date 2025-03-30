@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .search-bar {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .back-btn {
+            background: #dc3545;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .back-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📋 Patients List</h2>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search by name..." onkeyup="searchPatients()">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Condition</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="patientsTable">
+                <!-- Patients will be loaded here -->
+            </tbody>
+        </table>
+
+        <a href="dashboard.html" class="back-btn">⬅ Back to Dashboard</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sample patients data
+            const patients = [
+                { name: "John Doe", age: 45, condition: "Diabetes" },
+                { name: "Jane Smith", age: 34, condition: "Hypertension" },
+                { name: "Emily Johnson", age: 29, condition: "Asthma" },
+                { name: "Michael Brown", age: 50, condition: "Heart Disease" },
+                { name: "Sarah Wilson", age: 40, condition: "Arthritis" }
+            ];
+
+            const patientsTable = document.getElementById("patientsTable");
+
+            // Populate table
+            patients.forEach(patient => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${patient.name}</td>
+                    <td>${patient.age}</td>
+                    <td>${patient.condition}</td>
+                    <td><button onclick="viewDetails('${patient.name}')">View</button></td>
+                `;
+                patientsTable.appendChild(row);
+            });
+        });
+
+        // Search function
+        function searchPatients() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#patientsTable tr");
+
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                row.style.display = name.includes(input) ? "" : "none";
+            });
+        }
+
+        // View patient details (for now, just an alert)
+        function viewDetails(name) {
+            alert("Viewing details for " + name);
+        }
+    </script>
+</body>
+</html>

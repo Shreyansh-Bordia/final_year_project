@@ -1,13 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .profile-menu {
+            position: relative;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            background: white;
+            list-style: none;
+            padding: 0;
+            border: 1px solid #ddd;
+            width: 150px;
+            right: 0;
+        }
+
+        .dropdown li {
+            padding: 10px;
+        }
+
+        .dropdown li a {
+            text-decoration: none;
+            color: black;
+            display: block;
+        }
+
+        .dropdown li:hover {
+            background: #f0f0f0;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        /* Hover Effect */
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Table */
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <h2>Doctor Dashboard</h2>
-        <p>View patient files and provide prescriptions.</p>
+    <nav class="navbar">
+        <div class="logo">Jeevan Kavach</div>
+        <div class="profile-menu">
+            <button id="profileButton">👤 Profile</button>
+            <ul id="profileDropdown" class="dropdown">
+                <li><a class="dropdown-item" href="/settings">⚙ Settings</a></li>
+                <li><a class="dropdown-item" href="/update-profile">📝 Update Profile</a></li>
+                <li><a class="dropdown-item" href="/logout">🚪 Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>📅 Upcoming Appointments</h3>
+            <p id="appointmentCount">2 Today</p>
+        </div>
+        <div class="card">
+            <h3>👥 Total Patients</h3>
+            <p>150</p>
+        </div>
+        <div class="card">
+            <h3>🔔 Pending Requests</h3>
+            <p>3</p>
+        </div>
+        <div class="card">
+            <h3>📝 Prescriptions</h3>
+            <p>5 Pending</p>
+        </div>
+        <div class="card">
+            <h3>💬 Messages</h3>
+            <p>2 Unread</p>
+        </div>
     </div>
+
+    <h2>Today's Appointments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="appointmentsTable"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Profile Dropdown
+            const profileButton = document.getElementById("profileButton");
+            const profileDropdown = document.getElementById("profileDropdown");
+
+            profileButton.addEventListener("click", function (event) {
+                profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
+                event.stopPropagation();
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!profileButton.contains(event.target)) {
+                    profileDropdown.style.display = "none";
+                }
+            });
+
+            // Appointments Data
+            const appointments = [
+                { patient: "John Doe", time: "10:00 AM", status: "Upcoming" },
+                { patient: "Jane Smith", time: "11:30 AM", status: "Completed" }
+            ];
+
+            const appointmentsTable = document.getElementById("appointmentsTable");
+
+            appointments.forEach(appt => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${appt.patient}</td>
+                    <td>${appt.time}</td>
+                    <td>${appt.status}</td>
+                    <td><button onclick="window.location.href='/patients.html'">View</button></td>
+                `;
+                appointmentsTable.appendChild(row);
+            });
+        });
+    </script>
 </body>
 </html>

@@ -33,6 +33,10 @@ def login():
             session['role'] = 'patient'
             return redirect(url_for('patient_dashboard'))
         
+        if username == 'doctor' and password == 'doc123':
+            session['role'] = 'doctor'
+            return redirect(url_for('doctor_dashboard'))
+        
         if role in users and users[role]['username'] == username and users[role]['password'] == password:
             session['role'] = role
             return redirect(url_for(f'{role}_dashboard'))
@@ -164,6 +168,19 @@ def send_mail():
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+@app.route('/get-appointment')
+def get_appointment():
+    return render_template('doctor_list.html')  # Ensure doctor_list.html exists
+
+
+@app.route('/patients')
+def patients():
+    return render_template('patients.html')
+
+@app.route('/history')
+def history():
+    return render_template('history.html')
 
 @app.after_request
 def add_header(response):
