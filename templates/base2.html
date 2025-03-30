@@ -37,13 +37,18 @@
 
         document.addEventListener('DOMContentLoaded', function() {
         const logoutLinks = document.querySelectorAll('.nav-link[href="/logout"]');
+        if (window.performance && window.performance.navigation.type === 2) {
+            document.getElementById("signup-form").reset();
+        }
         logoutLinks.forEach(link => {
             link.addEventListener('click', function(event) {
             event.preventDefault();
             fetch('/logout', { method: 'GET' })
                 .then(() => {
-                window.history.replaceState({}, document.title, '/login'); 
-                window.location.reload();
+                    sessionStorage.clear(); 
+                    localStorage.clear();
+                    window.history.replaceState({}, document.title, '/'); 
+                    window.location.reload();
                 })
                 .catch(error => {
                 console.error("Logout failed:", error);

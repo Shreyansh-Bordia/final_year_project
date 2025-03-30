@@ -1,57 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <div class="hero-section">
             <div class="Signup-container">
                 <h2>Create an Account</h2><br>
 
-                <form method="POST">
+                <form method="POST" autocomplete="off">
                     <input type="hidden" name="role" value="{{ role }}"> 
                     <div class="form-group">
                         <label for="name">Full Name:</label>
-                        <input type="text" name="name" required>
+                        <input type="text" name="name" required autocomplete="off">
                     </div>
     
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" name="email" required>
+                        <input type="email" name="email" required autocomplete="off">
                     </div>
     
                     <div class="form-group">
                         <label for="phone">Phone Number:</label>
-                        <input type="text" name="phone" required>
+                        <input type="text" name="phone" required autocomplete="off">
                     </div>
     
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input type="text" name="username" required>
+                        <input type="text" name="username" required autocomplete="new-username">
                     </div>
     
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input type="password" name="password" required>
+                        <input type="password" name="password" required autocomplete="new-password">
                     </div>
                     
                     {% if role == 'patient' %}
                         <div class="form-group">
                             <label for="home_address">Home Address:</label>
-                            <input type="text" name="home_address" required>
+                            <input type="text" name="home_address" required autocomplete="off">
                         </div>
     
                         <div class="form-group">
                             <label for="age">Age:</label>
-                            <input type="number" name="age" required>
+                            <input type="number" name="age" required autocomplete="off">
                         </div>
                     
                     {% elif role == 'doctor' %}
                         <div class="form-group">
                             <label for="degree">Degree:</label>
-                            <input type="text" name="degree" required>
+                            <input type="text" name="degree" required autocomplete="off">
                         </div>
     
                         <div class="form-group">
                             <label for="position">Specialisation: </label>
-                            <input type="text" name="position" required>
+                            <input type="text" name="position" required autocomplete="off">
                         </div>
                     {% endif %}
     
@@ -69,4 +74,26 @@
             <a href="/login?role={{ role }}" class="btn btn-primary">Login</a>
         </div>
     </div>
+    <script>
+
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+            location.reload();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signupForm");
+            if (signupForm) {
+                signupForm.addEventListener("submit", function () {
+                    sessionStorage.setItem("signupCompleted", "true");
+                });
+            }
+
+            if (sessionStorage.getItem("signupCompleted") === "true") {
+                sessionStorage.removeItem("signupCompleted");
+                history.replaceState(null, "", location.href); 
+            }
+        });
+    </script>
 {% endblock %}
