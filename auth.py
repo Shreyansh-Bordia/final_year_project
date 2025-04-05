@@ -103,6 +103,13 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
+    if 'first_attempt_failed' not in session:
+        session['first_attempt_failed'] = True
+        flash("Invalid credentials. Please try again.", "danger")
+        return redirect(url_for('auth.login', role=role))
+
+    session.pop('first_attempt_failed', None)
+    
     if user and user.check_password(password):
         access_token = create_access_token(identity={'username': username, 'role': user.role}, expires_delta=datetime.timedelta(hours=1))
         
@@ -122,6 +129,7 @@ def login():
         # Store token in session
         session['role'] = user.role
         session['username'] = user.username
+        session['user_id'] = user.id
         session['start_time'] = datetime.datetime.now(timezone.utc).isoformat()
 
         # Set token as an HTTP-only cookie for security
@@ -151,29 +159,30 @@ def signup():
     email = data.get('email')
     phone = data.get('phone')
     role = data.get('role')
+    name = data.get('name')
+    state = data.get('state')
     age = data.get('age')
-    medical_history = data.get('medical_history')
-    specialization = data.get('specialization')
-    license_number = data.get('license_number')
-    department = data.get('department')
+    address = data.get('address')
+    degree = data.get('degree')
+    specialization = data.get('position')
 
-    # if User.query.filter_by(username=username).first():
-    #     flash("User already exists. Please log in.", "danger")
-    #     return redirect(url_for('auth.login', role=role))
+    if User.query.filter_by(username=username).first():
+        flash("User already exists. Please log in.", "danger")
+        return redirect(url_for('auth.login', role=role))
 
-    new_user = User(username=username, email=email, phone=phone, role=role)
+    new_user = User(name=name, username=username, email=email, phone=phone, state=state, role=role)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
 
     if role == 'patient':
-        new_patient = Patient(user_id=new_user.id, age=age, medical_history=medical_history)
+        new_patient = Patient(user_id=new_user.id, age=age, address=address)
         db.session.add(new_patient)
     elif role == 'doctor':
-        new_doctor = Doctor(user_id=new_user.id, specialization=specialization, license_number=license_number)
+        new_doctor = Doctor(user_id=new_user.id, specialization=specialization, degree=degree)
         db.session.add(new_doctor)
     elif role == 'admin':
-        new_admin = Admin(user_id=new_user.id, department=department)
+        new_admin = Admin(user_id=new_user.id)
         db.session.add(new_admin)
 
     db.session.commit()

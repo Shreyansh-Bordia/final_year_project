@@ -269,9 +269,9 @@
 
 
 
-from flask import Flask, make_response, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, make_response, render_template, request, redirect, url_for, session, flash
 from flask_jwt_extended import JWTManager, unset_jwt_cookies
-from models import db, User, LoginLog
+from models import Appointment, db, User, LoginLog
 from auth import auth_bp
 from routes import routes_bp
 import os
@@ -316,6 +316,10 @@ with app.app_context():
 
 @app.route('/')
 def home():
+    session.clear()
+    response = make_response(redirect(url_for('home')))
+    response.set_cookie('session', '', expires=0)
+    response.set_cookie('auth_token', '', expires=0)
     return render_template('index.html')
 
 @app.route('/contact')
@@ -362,6 +366,7 @@ def logout():
                 latest_entry.duration = duration
                 db.session.commit()
     
+    session.pop('first_attempt_failed', None)
     session.clear()
     flash("You have been logged out.", "info")
     response = make_response(redirect(url_for('home')))

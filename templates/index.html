@@ -99,19 +99,27 @@
                 Our platform combines advanced encryption with user-friendly features, prioritizing your privacy and well-being.
             </p>
             <h3>Experience healthcare redefined — secure, reliable, and just a click away.</h3><br>
-            <a href="/" class="btn btn-primary">Get Started</a>
+            <div class="signbox">
+                <h3>New User?</h3>
+                <p>Register now to enjoy our secured medical services.</p>
+                <a href="/auth/signup?role=patient" class="btn btn-primary" style="margin-right: 30px;">Patient Registration</a>
+                <a href="/auth/signup?role=doctor" class="btn btn-primary" style="margin-left: 30px;">Doctor Registration</a>
+            </div>
         </div>
     </div>
 
+    
     <div class="container py-5">
+        <h3 style="color: #0078FF;">Already have an account?</h3>
+        <p>Login now to access our secured medical services.</p><br>
         <div class="row">
             <div class="col-md-6">
-                <h3>For Patients</h3>
+                <h3 style="color: #0078FF;">For Patients</h3>
                 <p>Book appointments, consult doctors, and manage your health online.</p>
                 <a href="/auth/login?role=patient" class="btn btn-primary">Patient Login</a>
             </div>
             <div class="col-md-6">
-                <h3>For Doctors</h3>
+                <h3 style="color: #0078FF;">For Doctors</h3>
                 <p>Manage your appointments, consult patients, and track records efficiently.</p>
                 <a href="/auth/login?role=doctor" class="btn btn-primary">Doctor Login</a>
             </div>
@@ -172,9 +180,9 @@
                 const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
     
                 if (scrollAmount >= maxScroll) {
-                    scrollAmount = 0; // Reset to start when end is reached
+                    scrollAmount = 0;
                 } else {
-                    scrollAmount += 400; // Adjust speed by changing this value
+                    scrollAmount += 430;
                 }
     
                 scrollContainer.scrollTo({
@@ -183,7 +191,7 @@
                 });
             }
     
-            setInterval(autoScroll, 2500); // Scroll every 1 second
+            setInterval(autoScroll, 1500); 
         });
     </script>    
 {% endblock %}

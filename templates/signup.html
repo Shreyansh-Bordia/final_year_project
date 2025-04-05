@@ -36,11 +36,16 @@
                         <label for="password">Password:</label>
                         <input type="password" name="password" required autocomplete="new-password">
                     </div>
+
+                    <div class="form-group">
+                        <label for="position">State: </label>
+                        <input type="text" name="state" required autocomplete="off">
+                    </div>
                     
                     {% if role == 'patient' %}
                         <div class="form-group">
                             <label for="home_address">Home Address:</label>
-                            <input type="text" name="home_address" required autocomplete="off">
+                            <input type="text" name="address" required autocomplete="off">
                         </div>
     
                         <div class="form-group">
@@ -60,7 +65,7 @@
                         </div>
                     {% endif %}
     
-                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <br><button type="submit" class="btn btn-primary">Sign Up</button>
                 </form>
             </div>
             
@@ -71,7 +76,7 @@
         <div>
             <h3>Already have an account?</h3>
             <p>Login now to access our secured medical services.</p>
-            <a href="/login?role={{ role }}" class="btn btn-primary">Login</a>
+            <a href="/auth/login?role={{ role }}" class="btn btn-primary">Login</a>
         </div>
     </div>
     <script>

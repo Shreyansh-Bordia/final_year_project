@@ -18,9 +18,70 @@
             <div class="dashboard-section">
                 <h2>📅 Book an Appointment</h2>
                 <p>Schedule a consultation with a doctor.</p>
-                <a href="/appointment" class="btn btn-primary">Get Appointment</a>
+                <button id="openAppointmentModal" class="btn btn-primary">Get Appointment</button>
             </div>
+
         </div>
     </div>
+    
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Book an Appointment</h2>
+    
+            <form id="appointment-form" method="POST">
+                <label for="specialization"><h5>Select Specialization:</h5></label>
+                <select id="specialization" name="specialization" style="margin-top: -10px; height: 40px; width: 80%; border-radius: 15px;">
+                    <option value="" disabled>-- Choose Specialization --</option>
+                    <option value="Orthopedic">Orthopedic</option>
+                    <option value="Ophthalmologist">Ophthalmologist</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Neurologist">Neurologist</option>
+                    <option value="General Physician" selected>General Physician</option>
+                </select>
+
+                <label for="description"><h5>Brief Description of Illness:</h5></label>
+                <textarea id="description" name="description" rows="4" required style="margin-top: -10px; height: 100px; width: 80%; border-radius: 15px; border-width: 1px;"></textarea>
+
+                <button type="submit" class="btn btn-success" style="border-radius: 15px; margin-top: 5px; height: 50px; width: 60%;">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="waiting-modal" class="modal">
+        <div class="modal-content">
+            <p id="timer">Waiting Time: 0 seconds</p>
+            <p>Waiting for a doctor to accept your request...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var modal = document.getElementById("appointmentModal");
+            var btn = document.getElementById("openAppointmentModal");
+            var span = document.getElementsByClassName("close")[0];
+
+            // Open appointment modal
+            btn.onclick = function() {
+                modal.classList.add("show");
+                modal.style.display = "flex";
+            };
+
+            // Close modal
+            span.onclick = function() {
+                modal.classList.remove("show");
+                setTimeout(() => modal.style.display = "none", 200);
+            };
+
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.classList.remove("show");
+                    setTimeout(() => modal.style.display = "none", 200);
+                }
+            };
+        });
+    </script>
 
 {% endblock %}

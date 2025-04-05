@@ -1,13 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="dashboard-container">
-        <h2>Doctor Dashboard</h2>
-        <p>View patient files and provide prescriptions.</p>
+{% extends 'base2.html' %}
+{% block content %}
+
+    <div class="top">
+        <h2 class="welcome-message">Welcome to Jeevan Kavach</h2>
+        <img src="{{ url_for('static', filename='images/profile-icon.png') }}" alt="Profile" class="profile-icon" id="profileIcon">
     </div>
-</body>
-</html>
+
+    <div class="dashboard">
+        <div class="dashboard-sections">
+
+            <div class="dashboard-section">
+                <h2>📜 Patients History</h2>
+                <p>View and manage your past patient records.</p>
+                <a href="/history" class="btn btn-primary">View History</a>
+            </div>
+
+            <div class="dashboard-section">
+                <h2>📅  Check your Appointments</h2>
+                <p>Track your scheduled appointments.</p>
+                <a href="/appointment" class="btn btn-primary">Check Appointments</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
