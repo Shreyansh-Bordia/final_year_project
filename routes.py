@@ -1,56 +1,7 @@
-# from flask import Blueprint, render_template, request, flash, redirect, url_for
-# from flask_jwt_extended import jwt_required, get_jwt_identity
-# import os
-# from models import db, User
-# from models import db, User, Patient, Doctor, Admin
-
-# routes_bp = Blueprint('routes', __name__)
-# UPLOAD_FOLDER = 'static/uploads'
-# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# @routes_bp.route('/patient_dashboard')
-# @jwt_required()
-# def patient_dashboard():
-#     user_identity = get_jwt_identity()
-#     user = User.query.filter_by(username=user_identity['username']).first()
-
-#     if user.role != 'patient':
-#         return "Unauthorized", 403
-
-#     patient = Patient.query.filter_by(user_id=user.id).first()
-#     return render_template('patient_dashboard.html', patient=patient)
-
-# @routes_bp.route('/doctor_dashboard')
-# @jwt_required()
-# def doctor_dashboard():
-#     user_identity = get_jwt_identity()
-#     user = User.query.filter_by(username=user_identity['username']).first()
-
-#     if user.role != 'doctor':
-#         return "Unauthorized", 403
-
-#     doctor = Doctor.query.filter_by(user_id=user.id).first()
-#     return render_template('doctor_dashboard.html', doctor=doctor)
-
-# @routes_bp.route('/admin_dashboard')
-# @jwt_required()
-# def admin_dashboard():
-#     user_identity = get_jwt_identity()
-#     user = User.query.filter_by(username=user_identity['username']).first()
-
-#     if user.role != 'admin':
-#         return "Unauthorized", 403
-
-#     admin = Admin.query.filter_by(user_id=user.id).first()
-#     return render_template('admin_dashboard.html', admin=admin)
-
-
-
-
-
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, flash, render_template, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, User, Patient, Doctor, Admin
+from models import db, User, Patient, Doctor, Admin, Appointment
+from extensions import socketio 
 
 routes_bp = Blueprint('routes', __name__)
 
@@ -70,7 +21,7 @@ def patient_dashboard():
         return "Unauthorized", 403
 
     patient = Patient.query.filter_by(user_id=user.id).first()
-    return render_template('patient_dashboard.html', patient=patient)
+    return render_template('patient_dashboard.html')
 
 @routes_bp.route('/doctor_dashboard')
 @jwt_required()
@@ -80,7 +31,7 @@ def doctor_dashboard():
         return "Unauthorized", 403
 
     doctor = Doctor.query.filter_by(user_id=user.id).first()
-    return render_template('doctor_dashboard.html', doctor=doctor)
+    return render_template('doctor_dashboard.html')
 
 @routes_bp.route('/admin_dashboard')
 @jwt_required()
@@ -90,4 +41,54 @@ def admin_dashboard():
         return "Unauthorized", 403
 
     admin = Admin.query.filter_by(user_id=user.id).first()
-    return render_template('admin_dashboard.html', admin=admin)
+    return render_template('admin_dashboard.html')
+
+@routes_bp.route('/create_appointment', methods=['POST'])
+@jwt_required()
+def create_appointment():
+    user_identity = get_jwt_identity()
+    user = User.query.filter_by(username=user_identity['username']).first()
+
+    if not user or user.role != 'patient':
+        flash('Unauthorized access', 'danger')
+        return render_template('patient_dashboard.html')
+
+    patient = Patient.query.filter_by(user_id=user.id).first()
+    if not patient:
+        flash('Patient record not found.', 'danger')
+        return render_template('patient_dashboard.html')
+
+    specialization = request.form.get('specialization')
+    description = request.form.get('description')
+
+    if not specialization or not description:
+        flash('All fields are required.', 'warning')
+        return render_template('patient_dashboard.html')
+
+    appointment = Appointment(
+        specialisation=specialization,
+        illness=description,
+        patient_id=patient.id
+    )
+    db.session.add(appointment)
+    db.session.commit()
+
+    import uuid
+    room_id = str(uuid.uuid4())
+
+    socketio.emit('new_appointment', {
+        'specialisation': specialization,
+        'description': description,
+        'patient_name': user.username,
+        'room_id': room_id
+    }, namespace='/notifications')
+
+    return render_template('chat_room.html', room_id=room_id, username=user.username)
+
+
+@routes_bp.route('/chat/<room_id>')
+@jwt_required()
+def chat_room(room_id):
+    user = get_jwt_identity()
+    return render_template('chat_room.html', room_id=room_id, username=user['username'])
+

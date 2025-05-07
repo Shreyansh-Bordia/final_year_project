@@ -29,7 +29,7 @@
             <span class="close">&times;</span>
             <h2>Book an Appointment</h2>
     
-            <form id="appointment-form" method="POST">
+            <form id="appointment-form" method="POST" action="/create_appointment">
                 <label for="specialization"><h5>Select Specialization:</h5></label>
                 <select id="specialization" name="specialization" style="margin-top: -10px; height: 40px; width: 80%; border-radius: 15px;">
                     <option value="" disabled>-- Choose Specialization --</option>
@@ -46,13 +46,6 @@
 
                 <button type="submit" class="btn btn-success" style="border-radius: 15px; margin-top: 5px; height: 50px; width: 60%;">Submit</button>
             </form>
-        </div>
-    </div>
-
-    <div id="waiting-modal" class="modal">
-        <div class="modal-content">
-            <p id="timer">Waiting Time: 0 seconds</p>
-            <p>Waiting for a doctor to accept your request...</p>
         </div>
     </div>
 

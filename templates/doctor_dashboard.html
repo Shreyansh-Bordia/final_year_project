@@ -23,4 +23,45 @@
         </div>
     </div>
 
+    <div id="notification-modal" style="display:none; position:fixed; top:20%; left:50%; transform:translate(-50%, 0); background:#fff; padding:20px; border:2px solid #007bff; border-radius:10px; z-index:9999; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+        <h3>New Appointment Request</h3>
+        <p><strong>Specialisation:</strong> <span id="modal-specialisation"></span></p>
+        <p><strong>Illness:</strong> <span id="modal-description"></span></p>
+        <p><strong>Patient:</strong> <span id="modal-patient"></span></p>
+        <button id="join-btn" class="btn btn-success">Join</button>
+        <button id="cancel-btn" class="btn btn-danger">Cancel</button>
+    </div>
+    
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    const socket = io('/notifications');
+
+    let currentRoomId = null;
+
+    socket.on('connect', () => {
+        console.log('Connected to notifications channel');
+    });
+
+    socket.on('new_appointment', (data) => {
+        // Fill modal with data
+        document.getElementById('modal-specialisation').textContent = data.specialisation;
+        document.getElementById('modal-description').textContent = data.description;
+        document.getElementById('modal-patient').textContent = data.patient_name;
+        currentRoomId = data.room_id;  // Ensure the backend sends this
+        document.getElementById('notification-modal').style.display = 'block';
+    });
+
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+        document.getElementById('notification-modal').style.display = 'none';
+    });
+
+    document.getElementById('join-btn').addEventListener('click', () => {
+        if (currentRoomId) {
+            window.location.href = `/chat/${currentRoomId}`;
+        }
+    });
+</script>
+
+
 {% endblock %}
