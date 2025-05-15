@@ -96,7 +96,7 @@ This system is designed with Zero Trust Architecture (ZTA) principles, including
 
 ## 🧠 AI Monitoring
 
-* Behavioral anomaly detection using **Isolation Forest**
+* Behavioral anomaly detection using **Random Forest**
 * Logs request patterns, token behaviors, endpoint usage, etc.
 * Flags suspicious activity in real-time for further analysis
 
