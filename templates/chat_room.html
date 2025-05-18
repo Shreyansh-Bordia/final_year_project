@@ -1,25 +1,190 @@
 {% extends 'base2.html' %}
 {% block content %}
-<h3 style="margin: 20px 0 0 50px;">Consultation Room</h3>
-<div id="messages" style="height: 480px; margin: 20px 0 0 50px;"></div>
-<input id="msg" autocomplete="off" style="margin:0 0 50px 50px;"><button onclick="sendMsg()">Send</button>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h3 {
+        margin: 20px 0 0 50px;
+        color: #2c3e50;
+    }
+
+    #chat-container {
+        margin: 20px 50px;
+        width: 65%;
+    }
+
+    #messages {
+        height: 480px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 15px;
+        background-color: #fff8f2;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        max-width: 60%;
+        padding: 10px 15px;
+        margin: 5px 0;
+        border-radius: 10px;
+        word-wrap: break-word;
+        display: inline-block;
+        clear: both;
+    }
+
+    .left {
+        align-self: flex-start;
+        background-color: #dcf8c6; 
+        border-top-left-radius: 0;
+    }
+
+    .right {
+        align-self: flex-end;
+        background-color: #add8e6; 
+        border-top-right-radius: 0;
+    }
+
+    #msg, #fileInput {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+        width: 60%;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    img {
+        border-radius: 8px;
+        margin-top: 5px;
+        max-width: 100%;
+    }
+
+    a {
+        color: #0645AD;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .chat-inputs {
+        margin-top: 15px;
+    }
+</style>
+
+<div id="chat-container">
+    <h3>Consultation Room</h3><br>
+
+    <div id="messages"></div>
+
+    <div class="chat-inputs">
+        <input id="msg" autocomplete="off" placeholder="Type a message...">
+        <button onclick="sendMsg()">Send</button>
+    </div>
+
+    <div class="chat-inputs">
+        <input type="file" id="fileInput">
+        <button onclick="sendFile()">Upload File</button>
+    </div>
+</div>
 
 <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
 <script>
     const socket = io("/chat");
     const room = "{{ room_id }}";
-    socket.emit('join', { room });
+    const role = "{{ role | safe }}";
+    const username = "{{ username | safe }}";
+
+    console.log("Joining room:", room, "as", role, "with:", username);
+    socket.emit('join', { room: room, role: role, username: username });
 
     socket.on('message', function(data) {
         const div = document.createElement('div');
-        div.innerText = data;
+        div.classList.add('message');
+
+        // Role-based alignment
+        if (data.role === 'doctor') {
+            div.classList.add('right');
+        } else {
+            div.classList.add('left');
+        }
+
+        if (data.type === 'text') {
+            div.innerText = data.message;
+        } else if (data.type === 'file') {
+            if (data.fileType.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = data.fileUrl;
+                div.innerText = data.message + ':';
+                div.appendChild(img);
+            } else {
+                const a = document.createElement('a');
+                a.href = data.fileUrl;
+                a.target = "_blank";
+                a.innerText = data.message;
+                div.appendChild(a);
+            }
+        } else {
+            div.innerText = data.message || JSON.stringify(data);
+        }
+
         document.getElementById('messages').appendChild(div);
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
     function sendMsg() {
         const msg = document.getElementById("msg").value;
-        socket.emit('send_message', { room: room, message: msg });
+        if (msg.trim() === "") return;
+        socket.emit('send_message', {
+            room: room,
+            message: msg,
+            type: 'text',
+            role: role // include sender's role for alignment
+        });
         document.getElementById("msg").value = "";
+    }
+
+    function sendFile() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length === 0) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            socket.emit('send_message', {
+                room: room,
+                message: file.name,
+                fileData: evt.target.result,
+                fileType: file.type,
+                type: 'file',
+                role: role
+            });
+        };
+        reader.readAsDataURL(file);
+        fileInput.value = "";
     }
 </script>
 {% endblock %}

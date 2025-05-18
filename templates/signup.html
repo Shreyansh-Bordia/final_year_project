@@ -60,9 +60,18 @@
                         </div>
     
                         <div class="form-group">
-                            <label for="position">Specialisation: </label>
-                            <input type="text" name="position" required autocomplete="off">
+                            <label for="position">Specialization:</label>
+                            <select id="position" name="position" required style="margin-top: -10px; height: 40px; width: 80%;">
+                                <option value="" disabled selected hidden style="color: #999;">-- Choose Specialization --</option>
+                                <option value="Orthopedic">Orthopedic</option>
+                                <option value="Ophthalmologist">Ophthalmologist</option>
+                                <option value="Cardiologist">Cardiologist</option>
+                                <option value="Dermatologist">Dermatologist</option>
+                                <option value="Neurologist">Neurologist</option>
+                                <option value="General Physician">General Physician</option>
+                            </select>
                         </div>
+
                     {% endif %}
     
                     <br><button type="submit" class="btn btn-primary">Sign Up</button>

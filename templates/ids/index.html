@@ -1,0 +1,66 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<div class="hero-section">
+    <meta charset="UTF-8">
+    <title>Intrusion Detection System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .btn-send {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            margin: 0 10px;
+            transition: transform 0.3s;
+        }
+        .btn-send:hover {
+            transform: scale(1.1);
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+
+<div class="container text-center">
+    <h1>Intrusion Detection System</h1>
+    <button id="attack-button" class="btn btn-danger btn-send">Attack</button>
+    <button id="normal-button" class="btn btn-success btn-send">Normal</button>
+</div>
+</div>
+<div style="text-align: center; padding: 10px;">
+<button id="button" class="btn btn-primary"><a href="/monitor" target="_blank" style="color: white; text-decoration: none;">Monitor Screen</a></button>
+</div>
+
+<div style="text-align: center; align-content: center; background-color:red; color: white; height: 40px;">
+    This is just a demo!! The AI will be integrated with the login feature and it will predict the attacks in the real time. 
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#attack-button').click(function () {
+            $.post('/action', {type: 'attack'}, function (response) {
+                alert(`Record: ${JSON.stringify(response.record, null, 2)}\nPrediction: ${response.prediction}`);
+            });
+        });
+
+        $('#normal-button').click(function () {
+            $.post('/action', {type: 'normal'}, function (response) {
+                alert(`Record: ${JSON.stringify(response.record, null, 2)}\nPrediction: ${response.prediction}`);
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

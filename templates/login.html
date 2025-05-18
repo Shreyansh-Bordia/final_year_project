@@ -1,37 +1,121 @@
-
 {% extends 'base.html' %}
 {% block content %}
-    <div class="hero-section">
-        <div class="login-container">
-            <h1>{{ role }} Login</h1><br>
-            <form method="POST" autocomplete="off">
-                <input type="hidden" name="role" value="{{ role }}">  <!-- Auto-select role -->
-                
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" required autocomplete="off"><br><br>
-                </div>
+<div class="hero-section">
+    <div class="login-container">
+        <h1>{{ role }} Login</h1><br>
+        <form method="POST" autocomplete="off">
+            <input type="hidden" name="role" value="{{ role }}">  <!-- Auto-select role -->
 
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" required autocomplete="off"><br><br>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" required autocomplete="off"><br><br>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" required autocomplete="off"><br><br>
+            </div>
+
+            <br><button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+
+<div class="signbox">
+    <div>
+        <h3>New User?</h3>
+        <p>Sign in now to enjoy our secured medical services.</p>
+        <a href="/auth/signup?role={{ role }}" class="btn btn-primary">Sign Up</a>
+    </div>
+</div>
+
+<!-- MFA Modal (appears only after correct login step 1) -->
+{% if session.get('mfa_user') %}
+<div class="modal fade show" id="mfaModal" tabindex="-1" aria-labelledby="mfaModalLabel" aria-modal="true" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4">
+            <h5 class="modal-title" id="mfaModalLabel">Multi-Factor Authentication</h5>
+            <form method="POST" action="{{ url_for('auth.verify_code') }}">
+                <div class="form-group mt-3">
+                    <label for="code">Enter the 7-digit code sent to your email:</label>
+                    <input type="text" name="code" maxlength="7" class="form-control" required>
                 </div>
-                
-                <br><button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-success mt-3">Verify</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('auth.resend_code') }}">
+                <button type="submit" id="resendBtn" class="btn btn-secondary mt-2" disabled>Resend Code (60s)</button>
             </form>
         </div>
     </div>
-    <div class="signbox">
-        <div>
-            <h3>New User?</h3>
-            <p>Sign in now to enjoy our secured medical services.</p>
-            <!-- <a href="/signin?role=patient" class="btn btn-primary">Sign Up</a> -->
-            <a href="/auth/signup?role={{ role }}" class="btn btn-primary">Sign Up</a>
+</div>
 
-        </div>
-    </div>
+<!-- Modal backdrop -->
+<div class="modal-backdrop fade show"></div>
 
-    
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("login-form");
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(loginForm);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Proceed to MFA") {
+                    document.getElementById("mfa-modal").style.display = "block";
+                } else {
+                    alert("Login failed or unexpected response.");
+                }
+            })
+            .catch(error => {
+                console.error("Login error:", error);
+            });
+        });
+    }
+
+    // Handle MFA form submit
+    const mfaForm = document.getElementById("mfa-form");
+    if (mfaForm) {
+        mfaForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const code = document.getElementById("mfa-code").value;
+
+            fetch("/auth/verify_mfa", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ code }),
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    alert("Invalid MFA code");
+                }
+            })
+            .catch(error => {
+                console.error("MFA error:", error);
+            });
+        });
+    }
+});
+</script>
+
+{% endif %}
 {% endblock %}
-
-

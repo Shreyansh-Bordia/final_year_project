@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero-section">
+    <title>MFA Code Verification</title>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow p-4" style="width: 100%; max-width: 400px; background-color: white;">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">📩 Code Verification</h3>
+                <p class="text-center text-muted">Enter the 7-digit code sent to <strong>{{ email }}</strong>.</p>
+
+                <!-- MFA Verification Form -->
+                <form method="POST" action="{{ url_for('auth.verify_mfa') }}">
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <div class="form-group mb-3">
+                        <label for="code">Enter Code</label>
+                        <input type="text" class="form-control" name="code" id="code" placeholder="XXXXXXX" required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Verify</button>
+                </form>
+
+                <!-- Resend MFA Form -->
+                <form method="POST" action="{{ url_for('auth.send_mfa') }}" id="resendForm" class="text-center mt-3">
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <button type="submit" class="btn btn-link" id="resendBtn" disabled>
+                        Resend Code (<span id="timer">20</span>s)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="text-align: center; align-content: center; background-color:rgb(0, 124, 29); color: white; height: 40px;">
+    Protecting your personal and health data with integrity, privacy, and security at every step.
+</div>
+
+<script>
+    let timer = 20;
+    const btn = document.getElementById("resendBtn");
+    const timerText = document.getElementById("timer");
+
+    const countdown = setInterval(() => {
+        timer--;
+        timerText.innerText = timer;
+        if (timer <= 0) {
+            clearInterval(countdown);
+            btn.disabled = false;
+            btn.innerText = "Resend Code";
+        }
+    }, 1000);
+</script>
+{% endblock %}

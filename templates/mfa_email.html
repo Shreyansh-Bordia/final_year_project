@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero-section">
+    <title>MFA - Email Verification</title>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow p-4" style="width: 100%; max-width: 400px; background-color: white;">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">🔒 Email Verification</h3>
+                <p class="text-center text-muted">Enter your email that you used at the time of registration to receive the authentication code.</p>
+                <form method="POST" action="{{ url_for('auth.send_mfa') }}">
+                    <div class="form-group mb-3">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" name="email" id="email" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send Code</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="text-align: center; align-content: center; background-color:rgb(0, 124, 29); color: white; height: 40px;">
+    Protecting your personal and health data with integrity, privacy, and security at every step.
+</div>
+{% endblock %}
+
+
