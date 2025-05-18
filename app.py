@@ -37,8 +37,8 @@ app.config['MAIL_DEFAULT_SENDER'] = 'shreyansh.is21@bmsce.ac.in'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'shreyansh.is21@bmsce.ac.in'
-app.config['MAIL_PASSWORD'] = 'rpsjykfarsfwzrry'
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
 
 mail.init_app(app)
 jwt = JWTManager(app)
