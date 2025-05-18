@@ -29,23 +29,24 @@
 
     .message {
         max-width: 60%;
-        padding: 10px 15px;
-        margin: 5px 0;
+        padding: 8px 12px;        
+        margin: 0;       
         border-radius: 10px;
         word-wrap: break-word;
         display: inline-block;
         clear: both;
     }
 
+
     .left {
         align-self: flex-start;
-        background-color: #dcf8c6; 
+        background-color: #dcf8c6;
         border-top-left-radius: 0;
     }
 
     .right {
         align-self: flex-end;
-        background-color: #add8e6; 
+        background-color: #add8e6;
         border-top-right-radius: 0;
     }
 
@@ -89,6 +90,14 @@
     .chat-inputs {
         margin-top: 15px;
     }
+
+    .sender-label {
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #8a8a8a;
+        margin-bottom: 2px;
+        opacity: 0.6;
+    }
 </style>
 
 <div id="chat-container">
@@ -114,40 +123,51 @@
     const role = "{{ role | safe }}";
     const username = "{{ username | safe }}";
 
-    console.log("Joining room:", room, "as", role, "with:", username);
+    let lastSender = null;
+
     socket.emit('join', { room: room, role: role, username: username });
 
     socket.on('message', function(data) {
-        const div = document.createElement('div');
-        div.classList.add('message');
+        const container = document.createElement('div');
+        container.style.marginBottom = '10px';
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.alignItems = data.role === 'doctor' ? 'flex-end' : 'flex-start';
 
-        // Role-based alignment
-        if (data.role === 'doctor') {
-            div.classList.add('right');
-        } else {
-            div.classList.add('left');
+        if (lastSender !== `${data.username}-${data.role}`) {
+            const sender = document.createElement('div');
+            sender.classList.add('sender-label');
+            sender.innerText = data.username ? `${data.username} (${data.role})` : (data.role || 'User');
+            container.appendChild(sender);
+            lastSender = `${data.username}-${data.role}`;
         }
 
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(data.role === 'doctor' ? 'right' : 'left');
+
         if (data.type === 'text') {
-            div.innerText = data.message;
+            messageDiv.innerText = data.message;
         } else if (data.type === 'file') {
             if (data.fileType.startsWith('image/')) {
                 const img = document.createElement('img');
                 img.src = data.fileUrl;
-                div.innerText = data.message + ':';
-                div.appendChild(img);
+                messageDiv.innerText = data.message + ':';
+                messageDiv.appendChild(img);
             } else {
                 const a = document.createElement('a');
                 a.href = data.fileUrl;
                 a.target = "_blank";
                 a.innerText = data.message;
-                div.appendChild(a);
+                messageDiv.appendChild(a);
             }
         } else {
-            div.innerText = data.message || JSON.stringify(data);
+            messageDiv.innerText = data.message || JSON.stringify(data);
         }
 
-        document.getElementById('messages').appendChild(div);
+        container.appendChild(messageDiv);
+        document.getElementById('messages').appendChild(container);
+
         const messagesDiv = document.getElementById('messages');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
@@ -159,7 +179,8 @@
             room: room,
             message: msg,
             type: 'text',
-            role: role // include sender's role for alignment
+            role: role,
+            username: username
         });
         document.getElementById("msg").value = "";
     }
@@ -180,11 +201,13 @@
                 fileData: evt.target.result,
                 fileType: file.type,
                 type: 'file',
-                role: role
+                role: role,
+                username: username
             });
         };
         reader.readAsDataURL(file);
         fileInput.value = "";
     }
 </script>
+
 {% endblock %}

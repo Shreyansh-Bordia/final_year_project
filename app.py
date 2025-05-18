@@ -19,6 +19,7 @@ app.secret_key = 'a3f1b0c7d9e4f8a1b2c3d4e5f6a7b8c9'
 
 from ids import ids_bp
 app.register_blueprint(ids_bp)
+load_dotenv(r'final_year_project\credentials.env')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
 app.config['SQLALCHEMY_BINDS'] = {
@@ -37,15 +38,14 @@ app.config['MAIL_DEFAULT_SENDER'] = 'shreyansh.is21@bmsce.ac.in'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'shreyansh.is21@bmsce.ac.in'
-app.config['MAIL_PASSWORD'] = 'rpsjykfarsfwzrry'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
 mail.init_app(app)
 jwt = JWTManager(app)
 
 db.init_app(app)
 
-load_dotenv(r'final_year_project\credentials.env')
 EMAIL_USER = os.getenv('EMAIL_USER')
 EMAIL_PASS = os.getenv('EMAIL_PASS')
 
