@@ -27,17 +27,6 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
 
-class Appointment(db.Model):
-    __bind_key__ = 'users'  
-    __tablename__ = 'appointments'
-
-    id = db.Column(db.Integer, primary_key=True)
-    specialisation = db.Column(db.String(100), nullable=False)
-    illness = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(50), default="waiting")
-    patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False)
-    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(IST), nullable=False)
-
 class Patient(db.Model):
     __bind_key__ = 'users'  
     __tablename__ = 'patients'
@@ -70,6 +59,28 @@ class Admin(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
 
     user = db.relationship('User', backref=db.backref('admin', uselist=False))
+
+
+class Appointment(db.Model):
+    __bind_key__ = 'users'  
+    __tablename__ = 'appointments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    specialisation = db.Column(db.String(100), nullable=False)
+    illness = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), default="waiting")
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(IST), nullable=False)
+
+    patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey("doctors.id"), nullable=True)
+
+    remarks = db.Column(db.Text, nullable=True)
+    prescription_url = db.Column(db.String(300), nullable=True)
+    next_consultation_date = db.Column(db.DateTime, nullable=True)
+    tests = db.Column(db.Text, nullable=True)
+
+    patient = db.relationship("Patient", backref=db.backref("appointments", lazy=True))
+    doctor = db.relationship("Doctor", backref=db.backref("appointments", lazy=True))
 
 
 class LoginLog(db.Model):
